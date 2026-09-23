@@ -5,6 +5,7 @@ simple python script to convert a video into a scratch project
 |Package|Version|
 |---------|-------|
 |moviepy|2.2.1|
+|numpy|2.5.3|
 |opencv-python|5.0.0.93|
 
 ## installation
