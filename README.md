@@ -13,8 +13,6 @@ simple python script to convert a video into a scratch project
 ### 2. run these commands in the terminal
 ```bash
 cd path/to/video-to-scratch-converter
-py -m venv .venv
-.venv\scripts\activate
 pip install -r requirements.txt
 ```
 ### 3. run the script with the command
