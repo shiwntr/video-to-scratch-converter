@@ -3,6 +3,7 @@ import copy
 import hashlib
 import json
 import os
+import shutil
 import wave
 import zipfile
 from pathlib import Path
@@ -14,7 +15,7 @@ from moviepy import VideoFileClip
 parser = argparse.ArgumentParser(description="Convert a video file to a scratch 3.0 project.")
 parser.add_argument("video_path", help="Path to input video.")
 parser.add_argument("output_path", nargs="?", default="output.sb3", help="Path for generated scratch project. Default is output.sb3.")
-parser.add_argument("--create_sprite", "-s", default="False", help="Create a sprite instead of an entire project. Default is False.")
+parser.add_argument("--create_sprite", "-s", action="store_true", help="Create a sprite instead of an entire project. Default is False.")
 parser.add_argument("--color", "-c", default="#0f0f0f", help="Hex color for background. Default is dark gray (#0f0f0f).")
 args = parser.parse_args()
 
@@ -24,15 +25,9 @@ BASE_SPRITE3_BASE = {"isStage":False,"name":"Animation","variables":{},"lists":{
 
 temp_dir = "temp"
 
-output_path = args.output_path
-
 def remove_temp_dir():
     if os.path.exists(temp_dir):
-        for file in os.listdir(temp_dir):
-            file_path = os.path.join(temp_dir, file)
-            if os.path.isfile(file_path):
-                os.remove(file_path)
-        os.rmdir(temp_dir)
+        shutil.rmtree(temp_dir)
 
 if not os.path.exists(temp_dir):
     os.makedirs(temp_dir, exist_ok=True)
@@ -40,8 +35,8 @@ else:
     remove_temp_dir()
     os.makedirs(temp_dir, exist_ok=True)
 
-if os.path.exists(output_path):
-    os.remove(output_path)
+if os.path.exists(args.output_path):
+    os.remove(args.output_path)
 
 def zip_folder(folder_path, output_path):
     with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
@@ -167,5 +162,5 @@ def generate_scratch_file(video_path, output_path, solid_color, is_sprite):
     zip_folder(temp_dir, output_path)
     print(f"Finished generating {output_path}.")
 
-generate_scratch_file(args.video_path, output_path, args.color, args.create_sprite)
+generate_scratch_file(args.video_path, args.output_path, args.color, args.create_sprite)
 remove_temp_dir()
